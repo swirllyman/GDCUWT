@@ -101,6 +101,7 @@ public class ItemInteraction : MonoBehaviour {
 		if(c.gameObject.tag == "Blueprint") {
 			c.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 			if(Input.GetMouseButton (0)) {
+				currentObject = c.gameObject;
 				Destroy (c.gameObject);
 			}
 		}
