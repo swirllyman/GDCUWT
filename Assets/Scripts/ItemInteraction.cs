@@ -7,7 +7,9 @@ public class ItemInteraction : MonoBehaviour {
 
 	public Camera craftCamera;
 	private bool crafting;
+	private GameObject currentCraftObject;
 	private GameObject currentObject;
+	private bool interacting;
 	private RaycastHit hit;
 
 	private Vector3 currentPoint;
@@ -21,6 +23,11 @@ public class ItemInteraction : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+		if(currentObject != null && interacting){
+			if(Input.GetMouseButton (0)) {
+				Destroy (currentObject);
+			}
+		}
 		if(crafting) {
 			mainCamera.enabled = false;
 			craftCamera.enabled = true;
@@ -35,7 +42,7 @@ public class ItemInteraction : MonoBehaviour {
 					if(lightUpObject.GetComponent <Renderer>().enabled) {
 						lightUpObject.GetComponent<ParticleSystem>().enableEmission = true;
 						if(Input.GetMouseButtonDown(0)) {
-							currentObject = hit.collider.gameObject;
+							currentCraftObject = hit.collider.gameObject;
 							//Debug.Log(Input.mousePosition);
 						}
 					}
@@ -44,8 +51,8 @@ public class ItemInteraction : MonoBehaviour {
 						lightUpObject.GetComponent<ParticleSystem>().enableEmission = false;
 						lightUpObject = null;
 					}
-					if(currentObject != null){
-						currentObject = null;
+					if(currentCraftObject != null){
+						currentCraftObject = null;
 					}
 				}else if(lightUpObject != null) {
 					lightUpObject.GetComponent<ParticleSystem>().enableEmission = false;
@@ -56,19 +63,19 @@ public class ItemInteraction : MonoBehaviour {
 				lightUpObject = null;
 			}
 
-			if(currentObject != null) {
+			if(currentCraftObject != null) {
 				Vector3.Lerp(transform.position, currentPoint, speed * Time.deltaTime);
 				Debug.Log (hit.transform.position);
-				currentObject.transform.position = currentPoint;
+				currentCraftObject.transform.position = currentPoint;
 				if(Physics.Raycast (ray, out hit, 10000.0f)) {
 					if(hit.collider.tag == "Snap") {
 						Debug.Log ("Snap");
-						currentObject.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y+25.0f, hit.transform.position.z);
-						currentObject = null;
+						currentCraftObject.transform.position = new Vector3(hit.transform.position.x, hit.transform.position.y+25.0f, hit.transform.position.z);
+						currentCraftObject = null;
 					}
 				}
 				if(Input.GetMouseButtonUp (0)) {
-					currentObject = null;
+					currentCraftObject = null;
 				}
 			}
 
@@ -78,12 +85,11 @@ public class ItemInteraction : MonoBehaviour {
 		}
 	}
 
-	void OnTriggerStay(Collider c){
+	void OnTriggerEnter(Collider c){
 		if(c.gameObject.tag == "Interact") {
 			c.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
-			if(Input.GetMouseButton (0)) {
-				Destroy (c.gameObject);
-			}
+			currentObject = c.gameObject;
+			interacting = true;
 		}
 		if(c.gameObject.tag == "CraftingTable") {
 			c.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
@@ -103,6 +109,8 @@ public class ItemInteraction : MonoBehaviour {
 	void OnTriggerExit (Collider c) {
 		if(c.gameObject.tag == "Interact") {
 			c.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
+			currentObject = null;
+			interacting = false;
 		}
 
 		if(c.gameObject.tag == "CraftingTable") {
