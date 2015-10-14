@@ -16,12 +16,16 @@ public class StartPage : MonoBehaviour {
 	
 	}
 
-	void OnGUI () {
-		GUI.Box (new Rect(Screen.width / 2 - 100, Screen.height/4, 200, 50), "", styler);
+	public void StartLevel(string levelName){
+		Application.LoadLevel(levelName);
+	}
 
-		GUI.skin = skin;
-		if(GUI.Button (new Rect(Screen.height / 2 - 75, Screen.height / 2, 150, 30), "Start")) {
-			Application.LoadLevel ("Practice Zone");
-		}
+	void OnGUI () {
+//		GUI.Box (new Rect(Screen.width / 2 - 100, Screen.height/4, 200, 50), "", styler);
+//
+//		GUI.skin = skin;
+//		if(GUI.Button (new Rect(Screen.height / 2 - 75, Screen.height / 2, 150, 30), "Start")) {
+//			Application.LoadLevel ("Practice Zone");
+//		}
 	}
 }
