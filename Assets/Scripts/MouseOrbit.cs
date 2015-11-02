@@ -39,7 +39,7 @@ public class MouseOrbit : MonoBehaviour {
 	}
 
 	void LateUpdate () {
-		if (target) {
+		if (target != null && transform.root.GetComponent<WalkAround>().cursorHide) {
 			if(currentDistance > 50){
 				xSpeed = 2;
 			}else if(currentDistance > 15){

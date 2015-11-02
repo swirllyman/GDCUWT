@@ -45,19 +45,19 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\CraftSnap.cs" />
      <Compile Include="Assets\Scripts\BlockMover.cs" />
      <Compile Include="Assets\Scripts\CameraInWater.cs" />
+     <Compile Include="Assets\Scripts\CraftSnap.cs" />
+     <Compile Include="Assets\Scripts\CraftingItems.cs" />
      <Compile Include="Assets\Scripts\Fog.cs" />
      <Compile Include="Assets\Scripts\Inventory.cs" />
-     <Compile Include="Assets\Scripts\ItemInteraction.cs" />
      <Compile Include="Assets\Scripts\MouseOrbit.cs" />
      <Compile Include="Assets\Scripts\RaftCraft.cs" />
      <Compile Include="Assets\Scripts\RaycastInteract.cs" />
      <Compile Include="Assets\Scripts\StartPage.cs" />
+     <Compile Include="Assets\Scripts\TableColorChanger.cs" />
      <Compile Include="Assets\Scripts\WalkAround.cs" />
      <Compile Include="Assets\Scripts\Water.cs" />
-     <Compile Include="Assets\TableColorChanger.cs" />
      <Compile Include="Assets\z_Standard Assets\Water (Basic)\Sources\Scripts\WaterSimple.cs" />
      <None Include="Assets\z_Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
      <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />

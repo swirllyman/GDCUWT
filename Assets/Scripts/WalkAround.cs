@@ -47,6 +47,7 @@ public class WalkAround : MonoBehaviour {
 	}
 
 	void Start () {
+		mesh.GetComponent<Animator>().SetBool ("Moving", false);
 	}
 
 	void FixedUpdate() {
@@ -54,8 +55,28 @@ public class WalkAround : MonoBehaviour {
 			swimSpeed -= Time.deltaTime;
 		}
 	}
+
+	public bool cursorHide = true;
 	// Update is called once per frame
 	void Update () {
+
+		if(Input.GetKeyDown (KeyCode.Escape))
+	  	{	
+			if(cursorHide)
+				cursorHide = false;
+			else
+				cursorHide = true;
+		}
+		if(cursorHide)
+		{
+			Cursor.lockState = CursorLockMode.Locked;
+			Cursor.visible = false;
+		}else
+		{
+			Cursor.lockState = CursorLockMode.None;
+			Cursor.visible = true;
+		}
+
 		RaycastHit ray;
 
 		if(Physics.Raycast(new Vector3(transform.position.x, transform.position.y+1.5f, transform.position.z), mesh.transform.forward, out ray, 2.5f)) {
@@ -91,10 +112,10 @@ public class WalkAround : MonoBehaviour {
 
 		if(sprinting) {
 			inverse_speed = 2;
-			mesh.GetComponent<Animation>()["Walk"].speed = 2;
+		//	mesh.GetComponent<Animation>()["Walk"].speed = 2;
 		} else {
 			inverse_speed = 3;
-			mesh.GetComponent<Animation>()["Walk"].speed = 1;
+		//	mesh.GetComponent<Animation>()["Walk"].speed = 1;
 		}
 
 
@@ -108,7 +129,7 @@ public class WalkAround : MonoBehaviour {
 			sprinting = false;
 		}
 
-		if(Time.timeScale != 0.0) {
+		if(Time.timeScale != 0.0 && cursorHide) {
 			transform.rotation = Quaternion.Euler(0, camera.transform.eulerAngles.y, 0);
 		}
 		if((left && forward) || (right && forward) || (left && backward) || (right && backward)){
@@ -186,11 +207,13 @@ public class WalkAround : MonoBehaviour {
 		}
 
 		if (left || right || forward || backward) {
-			mesh.GetComponent<Animation>().CrossFade("Walk");
+			//mesh.GetComponent<Animation>().CrossFade("Walk");
+			mesh.GetComponent<Animator>().SetBool ("Moving", true);
 		}
 		else {
-			mesh.GetComponent<Animation>().Stop ("Walk");
-			mesh.GetComponent<Animation>().Play ("Idle");
+			mesh.GetComponent<Animator>().SetBool ("Moving", false);
+//			mesh.GetComponent<Animation>().Stop ("Walk");
+//			mesh.GetComponent<Animation>().CrossFade ("Idle");
 		}
 	}
 

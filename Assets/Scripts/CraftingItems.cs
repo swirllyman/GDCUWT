@@ -1,7 +1,7 @@
 ﻿using UnityEngine;
 using System.Collections;
 
-public class ItemInteraction : MonoBehaviour {
+public class CraftingItems : MonoBehaviour {
 	public float speed = 1;
 	public Camera mainCamera;
 
@@ -24,11 +24,20 @@ public class ItemInteraction : MonoBehaviour {
 	// Update is called once per frame
 	void Update () {
 		if(currentObject != null && interacting){
-			if(Input.GetMouseButton (0)) {
-				Destroy (currentObject);
+			if(Input.GetMouseButtonDown(0))
+			{
+				switch(currentObject.tag){
+				case "Interact" :
+					Destroy (currentObject);
+					break;
+				case "CraftingTable":
+					crafting = true;
+					break;
+				}
 			}
 		}
 		if(crafting) {
+			currentObject.GetComponent<ParticleSystem>().enableEmission = false;
 			mainCamera.enabled = false;
 			craftCamera.enabled = true;
 			Ray ray = craftCamera.ScreenPointToRay(Input.mousePosition);
@@ -93,17 +102,8 @@ public class ItemInteraction : MonoBehaviour {
 		}
 		if(c.gameObject.tag == "CraftingTable") {
 			c.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
-			if(Input.GetMouseButton (0)) {
-				crafting = true;
-			}
-		}
-
-		if(c.gameObject.tag == "Blueprint") {
-			c.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
-			if(Input.GetMouseButton (0)) {
-				currentObject = c.gameObject;
-				Destroy (c.gameObject);
-			}
+			currentObject = c.gameObject;
+			interacting = true;
 		}
 	}
 
@@ -115,10 +115,6 @@ public class ItemInteraction : MonoBehaviour {
 		}
 
 		if(c.gameObject.tag == "CraftingTable") {
-			c.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
-		}
-
-		if(c.gameObject.tag == "Blueprint") {
 			c.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 		}
 	}
