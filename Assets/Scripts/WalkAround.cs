@@ -32,6 +32,7 @@ public class WalkAround : MonoBehaviour {
 	//Quaternion startingLoc;
 
 	void Awake () {
+		craftCamera = GameObject.FindGameObjectWithTag ("Craft Cam").GetComponent<Camera>();
 		mainCamera.enabled = true;
 		craftCamera.enabled = false;
 		baseGravityAmount = gravityAmount;

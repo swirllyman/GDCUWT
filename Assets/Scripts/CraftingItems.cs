@@ -19,6 +19,7 @@ public class CraftingItems : MonoBehaviour {
 	// Use this for initialization
 	void Start () {
 		crafting = false;
+		craftCamera = GameObject.FindGameObjectWithTag ("Craft Cam").GetComponent<Camera>();
 	}
 	
 	// Update is called once per frame
