@@ -13,13 +13,13 @@ public class CameraInWater : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider c) {
-		if(c.gameObject.name == "water") {
+		if(c.gameObject.tag == "Water") {
 			GetComponent<Renderer>().enabled = true;
 		}
 	}
 
 	void OnTriggerExit(Collider c) {
-		if(c.gameObject.name == "water") {
+		if(c.gameObject.tag == "Water") {
 			GetComponent<Renderer>().enabled = false;
 		}
 	}

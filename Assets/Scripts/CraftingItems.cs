@@ -16,10 +16,15 @@ public class CraftingItems : MonoBehaviour {
 
 	private GameObject lightUpObject;
 
+    private WalkAround playerScript;
+
 	// Use this for initialization
 	void Start () {
-		crafting = false;
-		craftCamera = GameObject.FindGameObjectWithTag ("Craft Cam").GetComponent<Camera>();
+        playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<WalkAround>();
+        craftCamera = GameObject.FindGameObjectWithTag("Craft Cam").GetComponent<Camera>();
+        mainCamera.enabled = true;
+        craftCamera.enabled = false;
+        crafting = false;
 	}
 	
 	// Update is called once per frame
@@ -33,6 +38,8 @@ public class CraftingItems : MonoBehaviour {
 					break;
 				case "CraftingTable":
 					crafting = true;
+                    playerScript.crafting = true;
+                    playerScript.HideCursor(false);
 					break;
 				}
 			}
@@ -96,12 +103,7 @@ public class CraftingItems : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider c){
-		if(c.gameObject.tag == "Interact") {
-			c.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
-			currentObject = c.gameObject;
-			interacting = true;
-		}
-		if(c.gameObject.tag == "CraftingTable") {
+		if(c.gameObject.tag == "Interact" || c.gameObject.tag == "CraftingTable") {
 			c.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 			currentObject = c.gameObject;
 			interacting = true;
@@ -109,14 +111,10 @@ public class CraftingItems : MonoBehaviour {
 	}
 
 	void OnTriggerExit (Collider c) {
-		if(c.gameObject.tag == "Interact") {
+		if(c.gameObject.tag == "Interact" || c.gameObject.tag == "CraftingTable") {
 			c.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 			currentObject = null;
 			interacting = false;
-		}
-
-		if(c.gameObject.tag == "CraftingTable") {
-			c.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 		}
 	}
 
@@ -125,7 +123,9 @@ public class CraftingItems : MonoBehaviour {
 		if(crafting){
 			if(GUI.Button (new Rect(Screen.width - 100, 25, 75, 50), "Exit")) {
 				crafting = false;
-			}
+                playerScript.crafting = false;
+                playerScript.HideCursor(true);
+            }
 		}
 	}
 }

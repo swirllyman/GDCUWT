@@ -14,13 +14,13 @@ public class Water : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider c) {
-		if(c.gameObject.name == "Player") {
+		if(c.gameObject.tag == "Player") {
 			c.gameObject.GetComponent("WalkAround").SendMessage("setSwimming", true);
 		}
 	}
 
 	void OnTriggerExit(Collider c) {
-		if(c.gameObject.name == "Player") {
+		if(c.gameObject.tag == "Player") {
 			c.gameObject.GetComponent("WalkAround").SendMessage("setSwimming", false);
 		}
 	}

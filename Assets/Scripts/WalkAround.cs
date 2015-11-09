@@ -7,10 +7,13 @@ public class WalkAround : MonoBehaviour {
 	bool left;
 	bool right;
 	bool diagonal;
-	public GameObject mesh;
-	public GameObject camera;
+    bool highSlope;
+    public bool cursorHide = true;
+    public bool crafting;
+    public GameObject mesh;
+	public GameObject myCamera;
 
-	private float baseGravityAmount;
+	public float baseGravityAmount;
 	public float jumpAmount;
 	public float gravityAmount;
 
@@ -25,17 +28,14 @@ public class WalkAround : MonoBehaviour {
 	bool sprinting;
 	public bool falling;
 
-
-	public Camera mainCamera;
-	public Camera craftCamera;
+    Animator anim;
 
 	//Quaternion startingLoc;
 
 	void Awake () {
-		craftCamera = GameObject.FindGameObjectWithTag ("Craft Cam").GetComponent<Camera>();
-		mainCamera.enabled = true;
-		craftCamera.enabled = false;
-		baseGravityAmount = gravityAmount;
+        anim = mesh.GetComponent<Animator>();
+        crafting = false;
+		gravityAmount = baseGravityAmount;
 		swimming = false;
 		inverse_speed = 1.5f;
 		sprinting = false;
@@ -44,11 +44,13 @@ public class WalkAround : MonoBehaviour {
 		backward = false;
 		left = false;
 		right = false;
+        grounded = true;
+        HideCursor(true);
 		//startingLoc = mesh.transform.rotation;
 	}
 
 	void Start () {
-		mesh.GetComponent<Animator>().SetBool ("Moving", false);
+		anim.SetBool ("Moving", false);
 	}
 
 	void FixedUpdate() {
@@ -57,36 +59,49 @@ public class WalkAround : MonoBehaviour {
 		}
 	}
 
-	public bool cursorHide = true;
+
+    public void HideCursor(bool b)
+    {
+        if (b)
+        {
+            cursorHide = true;
+            Cursor.lockState = CursorLockMode.Locked;
+            Cursor.visible = false;
+        }
+        else
+        {
+            cursorHide = false;
+            Cursor.lockState = CursorLockMode.None;
+            Cursor.visible = true;
+        }
+    }
 	// Update is called once per frame
 	void Update () {
 
 		if(Input.GetKeyDown (KeyCode.Escape))
-	  	{	
-			if(cursorHide)
-				cursorHide = false;
+	  	{
+            if (cursorHide)
+                HideCursor(false);
 			else
-				cursorHide = true;
-		}
-		if(cursorHide)
-		{
-			Cursor.lockState = CursorLockMode.Locked;
-			Cursor.visible = false;
-		}else
-		{
-			Cursor.lockState = CursorLockMode.None;
-			Cursor.visible = true;
-		}
+                HideCursor(true);
+        }
 
-		RaycastHit ray;
+		RaycastHit hit;
 
-		if(Physics.Raycast(new Vector3(transform.position.x, transform.position.y+1.5f, transform.position.z), mesh.transform.forward, out ray, 2.5f)) {
-			Debug.DrawLine (new Vector3(transform.position.x, transform.position.y+1.5f, transform.position.z), ray.point, Color.green);
-			if(ray.collider.name == "ground") {
-				Debug.Log ("Hit Ground");
-			}
-		}
+        ///     Checking area in front to make sure the slope isn't too high    ///
+        if (Physics.Raycast(new Vector3(transform.position.x, transform.position.y + .5f, transform.position.z), mesh.transform.forward, out hit, 2.5f))
+        {
+            if (hit.collider.tag == "Ground")
+            {
+                if (hit.normal.y < .8f)
+                    highSlope = true;
+            }
+        }
+        else
+            highSlope = false;
 
+
+        //  Swimming    //
 		if(swimming) {
 			grounded = false;
 			falling = false;
@@ -105,6 +120,7 @@ public class WalkAround : MonoBehaviour {
 			falling = false;
 			if(Input.GetKeyDown(KeyCode.Space)){
 				falling = true;
+                grounded = false;
 				GetComponent<Rigidbody>().AddForce(new Vector3(0, jumpAmount, 0));
 			}
 		} else {
@@ -113,118 +129,139 @@ public class WalkAround : MonoBehaviour {
 
 		if(sprinting) {
 			inverse_speed = 2;
-		//	mesh.GetComponent<Animation>()["Walk"].speed = 2;
+            anim.SetBool("Sprint", true);
 		} else {
 			inverse_speed = 3;
-		//	mesh.GetComponent<Animation>()["Walk"].speed = 1;
+            anim.SetBool("Sprint", false);
 		}
 
 
 
-				/// Movement and rotations ///
-		 
-		if(Input.GetButtonDown ("Sprint")) {
-			sprinting = true;
-		}
-		if(Input.GetButtonUp ("Sprint")) {
-			sprinting = false;
-		}
+        /// Movement and rotations ///
+        if (!crafting)
+        {
+            if (Input.GetButton("Sprint"))
+                sprinting = true;
+            else
+                sprinting = false;
 
-		if(Time.timeScale != 0.0 && cursorHide) {
-			transform.rotation = Quaternion.Euler(0, camera.transform.eulerAngles.y, 0);
-		}
-		if((left && forward) || (right && forward) || (left && backward) || (right && backward)){
-			diagonal = true;
-		}
-		else {
-			diagonal = false;
-		}
+            if (Time.timeScale != 0.0 && cursorHide)
+                transform.rotation = Quaternion.Euler(0, myCamera.transform.eulerAngles.y, 0);
 
-		if(Input.GetButtonDown ("Forward")) {
-			forward = true;
-		} else if( Input.GetButtonUp ("Forward")){
-			forward = false;
-		}
+            if (Input.GetButton("Forward"))
+                forward = true;
+            else
+                forward = false;
 
-		if(Input.GetButtonDown ("Backward")) {
-			backward = true;
-		} else if( Input.GetButtonUp ("Backward")){
-			backward = false;
-		}
+            if (Input.GetButton("Backward"))
+                backward = true;
+            else 
+                backward = false;
 
-		if(Input.GetButtonDown ("Left")) {
-			left = true;
-		} else if( Input.GetButtonUp ("Left")){
-			left = false;
-		}
+            if (Input.GetButton("Left"))
+                left = true;
+            else 
+                left = false;
 
-		if(Input.GetButtonDown ("Right")) {
-			right = true;
-		} else if( Input.GetButtonUp ("Right")){
-			right = false;
-		}
-		if(!diagonal) {
-			if(forward){
-				gameObject.transform.Translate(new Vector3(0, 0, 1) / inverse_speed);         //Vector3.forward;
-				//GetComponent<Rigidbody>().AddForce(mesh.transform.forward * 20);
-				rotater (0);
-			}
-			if(backward){
-				gameObject.transform.Translate(new Vector3(0, 0, -1) / inverse_speed);
-				//GetComponent<Rigidbody>().AddForce(new Vector3(0, 0, -20));//new Vector 3 (0, 0, -1);
-				rotater (180);
-			}
-			if(left){
-				gameObject.transform.Translate(new Vector3(-1, 0, 0) / inverse_speed);         //Vector3.forward;
-				//GetComponent<Rigidbody>().AddForce(new Vector3(-20, 0, 0));
-				rotater (-90);
-			}
-			if(right){
-				gameObject.transform.Translate(Vector3.right / inverse_speed);         //Vector3.forward;
-				//GetComponent<Rigidbody>().AddForce(new Vector3(20, 0, 0));
-				rotater (90);
-			}
-		} else {
-			if(left && forward) {
-				gameObject.transform.Translate(new Vector3(-.75f, 0, 0) / inverse_speed);
-				gameObject.transform.Translate(new Vector3(0, 0, .75f) / inverse_speed);
-				rotater (315);
-			}
-			if(right && forward) {
-				gameObject.transform.Translate(new Vector3(.75f, 0, 0) / inverse_speed);
-				gameObject.transform.Translate(new Vector3(0, 0, .75f) / inverse_speed);
-				rotater (45);
-			}
-			if(left && backward) {
-				gameObject.transform.Translate(new Vector3(-.75f, 0, 0) / inverse_speed);
-				gameObject.transform.Translate(new Vector3(0, 0, -.75f) / inverse_speed);
-				rotater (205);
-			}
-			if(right && backward) {
-				gameObject.transform.Translate(new Vector3(.75f, 0, 0) / inverse_speed);
-				gameObject.transform.Translate(new Vector3(0, 0, -.75f) / inverse_speed);
-				rotater (135);
-			}
-		}
+            if (Input.GetButton("Right"))
+                right = true;
+            else
+                right = false;
 
-		if (left || right || forward || backward) {
-			//mesh.GetComponent<Animation>().CrossFade("Walk");
-			mesh.GetComponent<Animator>().SetBool ("Moving", true);
-		}
-		else {
-			mesh.GetComponent<Animator>().SetBool ("Moving", false);
-//			mesh.GetComponent<Animation>().Stop ("Walk");
-//			mesh.GetComponent<Animation>().CrossFade ("Idle");
-		}
+            //Diagonal Check
+            if ((left && forward) || (right && forward) || (left && backward) || (right && backward))
+                diagonal = true;
+            else
+                diagonal = false;
+
+
+            if (!diagonal)
+            {
+                if (forward)
+                {
+                    if(!highSlope) gameObject.transform.Translate(new Vector3(0, 0, 1) / inverse_speed);
+                    rotater(0);
+                }
+                if (backward)
+                {
+                    if (!highSlope) gameObject.transform.Translate(new Vector3(0, 0, -1) / inverse_speed);
+                    rotater(180);
+                }
+                if (left)
+                {
+                    if (!highSlope) gameObject.transform.Translate(new Vector3(-1, 0, 0) / inverse_speed);
+                    rotater(-90);
+                }
+                if (right)
+                {
+                    if (!highSlope) gameObject.transform.Translate(Vector3.right / inverse_speed);
+                    rotater(90);
+                }
+            }
+            else
+            {
+                if (left && forward)
+                {
+                    if (!highSlope)
+                    {
+                        gameObject.transform.Translate(new Vector3(-.75f, 0, 0) / inverse_speed);
+                        gameObject.transform.Translate(new Vector3(0, 0, .75f) / inverse_speed);
+                    }
+                    rotater(315);
+                }
+                if (right && forward)
+                {
+                    if (!highSlope)
+                    {
+                        gameObject.transform.Translate(new Vector3(.75f, 0, 0) / inverse_speed);
+                        gameObject.transform.Translate(new Vector3(0, 0, .75f) / inverse_speed);
+                    }
+                    rotater(45);
+                }
+                if (left && backward)
+                {
+                    if (!highSlope)
+                    {
+                        gameObject.transform.Translate(new Vector3(-.75f, 0, 0) / inverse_speed);
+                        gameObject.transform.Translate(new Vector3(0, 0, -.75f) / inverse_speed);
+                    }
+                    rotater(205);
+                }
+                if (right && backward)
+                {
+                    if (!highSlope)
+                    {
+                        gameObject.transform.Translate(new Vector3(.75f, 0, 0) / inverse_speed);
+                        gameObject.transform.Translate(new Vector3(0, 0, -.75f) / inverse_speed);
+                    }
+                    rotater(135);
+                }
+            }
+
+
+
+            //Animations
+            if (left || right || forward || backward)
+            {
+               anim.SetBool("Moving", true);
+            }
+            else
+            {
+                anim.SetBool("Moving", false);
+            }
+        }
 	}
+
+
 
 	void setSwimming (bool b) {
 		if (b) {
-			gravityAmount = gravityAmount/2;
+			gravityAmount = baseGravityAmount/2;
 			swimming = true;
 			falling = false;
 			grounded = false;
 		} else {
+            gravityAmount = baseGravityAmount;
 			swimming = false;
 			falling = true;
 		}
@@ -233,25 +270,17 @@ public class WalkAround : MonoBehaviour {
 
 	void OnCollisionExit(Collision c) {
 		if(!swimming){
-			if(c.gameObject.name == "ground") {
+			if(c.collider.tag == "Ground") {
 				grounded = false;
-			}
-		}
-	}
-
-	void OnCollisionStay (Collision c) {
-		if(!swimming){
-			if(c.gameObject.name == "ground") {
-				grounded = true;
-			} else {
-				grounded = false;
+                falling = true;
 			}
 		}
 	}
 
 	void OnCollisionEnter (Collision c) {
 		if(!swimming){
-			if(c.gameObject.name == "ground") {
+			if(c.collider.tag == "Ground") {
+                grounded = true;
 				falling = false;
 			}
 		}
