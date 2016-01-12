@@ -34,6 +34,7 @@ public class CraftingItems : MonoBehaviour {
 			{
 				switch(currentObject.tag){
 				case "Interact" :
+                        transform.root.GetComponent<ObjectiveManager>().recheckArea(currentObject);
 					Destroy (currentObject);
 					break;
 				case "CraftingTable":
