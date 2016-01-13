@@ -74,6 +74,7 @@
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
+    <Compile Include="Assets\FakeMover.cs" />
     <Compile Include="Assets\Scripts\BlockMover.cs" />
     <Compile Include="Assets\Scripts\CameraInWater.cs" />
     <Compile Include="Assets\Scripts\CheckPoint.cs" />
