@@ -3,7 +3,7 @@ using System.Collections;
 
 public class RaycastInteract : MonoBehaviour {
 	private Ray ray;
-	private GameObject currentObject;
+	public GameObject currentObject;
 	public float height;
 
 	// Use this for initialization
@@ -13,6 +13,15 @@ public class RaycastInteract : MonoBehaviour {
 	
 	// Update is called once per frame
 	void Update () {
+
+        Debug.Log("I am attached to : " + transform.root.name);
+
+        if(currentObject != null)
+        {
+            currentObject.layer = 2;
+        }
+
+
 		RaycastHit hit;
 		if(Physics.Raycast(new Vector3(transform.position.x, transform.position.y + height, transform.position.z), transform.TransformDirection(Vector3.forward), out hit, 5)){
 			print("Hit: " +hit.collider.name);

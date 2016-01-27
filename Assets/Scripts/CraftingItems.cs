@@ -55,27 +55,40 @@ public class CraftingItems : MonoBehaviour {
 			currentPoint.y = 458f;
 			//if(Physics.Raycast(transform.position, out hit, 10000.0f)) {
 			if(Physics.Raycast (ray, out hit, 10000.0f)) {
-				if(hit.collider.tag == "CraftInteract") {
-					lightUpObject = hit.collider.gameObject;
-					if(lightUpObject.GetComponent <Renderer>().enabled) {
-						lightUpObject.GetComponent<ParticleSystem>().enableEmission = true;
-						if(Input.GetMouseButtonDown(0)) {
-							currentCraftObject = hit.collider.gameObject;
-							//Debug.Log(Input.mousePosition);
-						}
-					}
-				} else if(hit.collider.tag == "Border") {
-					if(lightUpObject != null){
-						lightUpObject.GetComponent<ParticleSystem>().enableEmission = false;
-						lightUpObject = null;
-					}
-					if(currentCraftObject != null){
-						currentCraftObject = null;
-					}
-				}else if(lightUpObject != null) {
-					lightUpObject.GetComponent<ParticleSystem>().enableEmission = false;
-					lightUpObject = null;
-				}
+                if (hit.collider.tag == "CraftInteract") {
+                    lightUpObject = hit.collider.gameObject;
+                    if (lightUpObject.GetComponent<Renderer>().enabled) {
+                        lightUpObject.GetComponent<ParticleSystem>().enableEmission = true;
+                        if (Input.GetMouseButtonDown(0)) {
+                            currentCraftObject = hit.collider.gameObject;
+                            //Debug.Log(Input.mousePosition);
+                        }
+                    }
+                } else if (hit.collider.tag == "Border") {
+                    if (lightUpObject != null) {
+                        lightUpObject.GetComponent<ParticleSystem>().enableEmission = false;
+                        lightUpObject = null;
+                    }
+                    if (currentCraftObject != null) {
+                        currentCraftObject = null;
+                    }
+                } else if (hit.collider.tag == "Ground") {
+
+                    if (lightUpObject != null)
+                    {
+                        lightUpObject.GetComponent<ParticleSystem>().enableEmission = false;
+                        lightUpObject = null;
+                    }
+                    if (currentCraftObject != null)
+                    {
+                        currentCraftObject = null;
+                    }
+
+
+                } else if (lightUpObject != null) {
+                    lightUpObject.GetComponent<ParticleSystem>().enableEmission = false;
+                    lightUpObject = null;
+                }
 			} else if(lightUpObject != null) {
 				lightUpObject.GetComponent<ParticleSystem>().enableEmission = false;
 				lightUpObject = null;
