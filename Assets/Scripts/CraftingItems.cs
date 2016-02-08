@@ -116,18 +116,22 @@ public class CraftingItems : MonoBehaviour {
 		}
 	}
 
+    float currentObjectEmissionRate;
+    
 	void OnTriggerEnter(Collider c){
 		if(c.gameObject.tag == "Interact" || c.gameObject.tag == "CraftingTable") {
-			c.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
-			currentObject = c.gameObject;
+            currentObjectEmissionRate = c.gameObject.GetComponent<ParticleSystem>().emissionRate;
+            c.gameObject.GetComponent<ParticleSystem>().emissionRate = 100;
+
+            currentObject = c.gameObject;
 			interacting = true;
 		}
 	}
 
 	void OnTriggerExit (Collider c) {
 		if(c.gameObject.tag == "Interact" || c.gameObject.tag == "CraftingTable") {
-			c.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
-			currentObject = null;
+            c.gameObject.GetComponent<ParticleSystem>().emissionRate = currentObjectEmissionRate;
+            currentObject = null;
 			interacting = false;
 		}
 	}
