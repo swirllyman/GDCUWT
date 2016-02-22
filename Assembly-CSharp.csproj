@@ -6,7 +6,7 @@
 	<ProductVersion>10.0.20506</ProductVersion>
 	<SchemaVersion>2.0</SchemaVersion>
 	<RootNamespace></RootNamespace>
-	<ProjectGuid>{17B4ED67-399C-3145-1398-DEEAD24DAD07}</ProjectGuid>
+	<ProjectGuid>{10F0ED98-044D-B253-E7A0-720A1C5A07E5}</ProjectGuid>
 	<OutputType>Library</OutputType>
 	<AppDesignerFolder>Properties</AppDesignerFolder>
 	<AssemblyName>Assembly-CSharp</AssemblyName>
@@ -45,29 +45,32 @@
 	</Reference>
   </ItemGroup>
   <ItemGroup>
-     <Compile Include="Assets\CheckPoint.cs" />
+     <Compile Include="Assets\CraftableItem.cs" />
+     <Compile Include="Assets\FakeMover.cs" />
+     <Compile Include="Assets\FloatingItem.cs" />
      <Compile Include="Assets\Scripts\BlockMover.cs" />
      <Compile Include="Assets\Scripts\CameraInWater.cs" />
+     <Compile Include="Assets\Scripts\CheckPoint.cs" />
      <Compile Include="Assets\Scripts\CraftSnap.cs" />
      <Compile Include="Assets\Scripts\CraftingItems.cs" />
      <Compile Include="Assets\Scripts\Fog.cs" />
      <Compile Include="Assets\Scripts\Inventory.cs" />
      <Compile Include="Assets\Scripts\MouseOrbit.cs" />
+     <Compile Include="Assets\Scripts\ObjectiveManager.cs" />
      <Compile Include="Assets\Scripts\RaftCraft.cs" />
      <Compile Include="Assets\Scripts\RaycastInteract.cs" />
+     <Compile Include="Assets\Scripts\SpawnPlayer.cs" />
      <Compile Include="Assets\Scripts\StartPage.cs" />
      <Compile Include="Assets\Scripts\TableColorChanger.cs" />
      <Compile Include="Assets\Scripts\WalkAround.cs" />
      <Compile Include="Assets\Scripts\Water.cs" />
-     <Compile Include="Assets\SpawnPlayer.cs" />
      <Compile Include="Assets\z_Standard Assets\Water (Basic)\Sources\Scripts\WaterSimple.cs" />
+     <None Include="Assets\Shaders\OutlineDiffuseBump.shader" />
      <None Include="Assets\z_Standard Assets\Particles\Sources\Shaders\Particle Alpha Blend (Queue +100).shader" />
-     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Simple.shader" />
+     <None Include="Assets\Shaders\OutlineDiffuse.shader" />
+     <None Include="Assets\Shaders\OutlineOnly.shader" />
      <None Include="Assets\z_Standard Assets\Water (Basic)\Sources\Shaders\FX-Water Simple.shader" />
      <None Include="Assets\Standard Assets\CrossPlatformInput\CrossPlatformInputGuidelines.txt" />
-     <None Include="Assets\Standard Assets\Environment\Water\Water\Shaders\FXWaterPro.shader" />
-     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\WaterInclude.cginc" />
-     <None Include="Assets\Standard Assets\Environment\Water\Water4\Shaders\FXWater4Advanced.shader" />
  <Reference Include="UnityEngine.Advertisements">
  <HintPath>C:/Program Files/Unity/Editor/Data/UnityExtensions/Unity/Advertisements/UnityEngine.Advertisements.dll</HintPath>
  </Reference>
@@ -89,7 +92,7 @@
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="Assembly-CSharp-firstpass.csproj">
-      <Project>{2A084507-E160-D0B7-543D-4285BAEBBBB4}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
+      <Project>{BEE40B75-B9A2-4813-BF96-C673559343CA}</Project>      <Name>Assembly-CSharp-firstpass</Name>    </ProjectReference>
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
