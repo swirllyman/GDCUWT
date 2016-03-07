@@ -1,9 +1,18 @@
-Library/ShaderCache/2/2cbbeeb9a32797da3025002af2774633.bin
-Library/ShaderCache/d/d11b5d4f4f3b0089ff47b17d5b2bae11.bin
-GDC.sln
-Temp/UnityLockfile
-Library/CrashedAssetImports.txt
-Temp/
-Library/metadata
-Library/assetDatabase
-Library/
+# Ignore everything
+/*
+/*/
+
+# Inverse ignore some stuff
+!/Assets/
+!/ProjectSettings/
+!.gitignore
+
+# OS Stuff
+.DS_Store
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+$RECYCLE.BIN/
+Desktop.ini
