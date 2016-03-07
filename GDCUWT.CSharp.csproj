@@ -58,12 +58,6 @@
     <Reference Include="UnityEngine.Networking">
       <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
     </Reference>
-    <Reference Include="UnityEngine.Networking">
-      <HintPath>Library\UnityAssemblies\UnityEngine.Networking.dll</HintPath>
-    </Reference>
-    <Reference Include="UnityEngine.UI">
-      <HintPath>Library\UnityAssemblies\UnityEngine.UI.dll</HintPath>
-    </Reference>
     <Reference Include="UnityEditor">
       <HintPath>Library\UnityAssemblies\UnityEditor.dll</HintPath>
     </Reference>
@@ -93,7 +87,6 @@
     <Compile Include="Assets\Scripts\Inventory.cs" />
     <Compile Include="Assets\Scripts\MouseOrbit.cs" />
     <Compile Include="Assets\Scripts\ObjectiveManager.cs" />
-    <Compile Include="Assets\Scripts\RaftCraft.cs" />
     <Compile Include="Assets\Scripts\RaycastInteract.cs" />
     <Compile Include="Assets\Scripts\SpawnPlayer.cs" />
     <Compile Include="Assets\Scripts\StartPage.cs" />

@@ -13,6 +13,8 @@ public class CraftableItem : MonoBehaviour {
     public GameObject realObject;
 
     bool created = false;
+
+    public float outlineValue = .0015f;
     // Use this for initialization
     void Start () {
         gameObject.layer = 2;
@@ -44,9 +46,8 @@ public class CraftableItem : MonoBehaviour {
         if (hovering)
         {
             float currentOutlineAmount = GetComponent<Renderer>().material.GetFloat("_Outline");
-            float lerpValue = Mathf.Lerp(currentOutlineAmount, .015f, Time.deltaTime * 20);
+            float lerpValue = Mathf.Lerp(currentOutlineAmount, outlineValue, Time.deltaTime * 20);
             GetComponent<Renderer>().material.SetFloat("_Outline", lerpValue);
-            GetComponent<ParticleSystem>().enableEmission = true;
 
             if (Input.GetMouseButtonDown(0))
             {
@@ -58,7 +59,6 @@ public class CraftableItem : MonoBehaviour {
             float currentOutlineAmount = GetComponent<Renderer>().material.GetFloat("_Outline");
             float lerpValue = Mathf.Lerp(currentOutlineAmount, 0, Time.deltaTime * 20);
             GetComponent<Renderer>().material.SetFloat("_Outline", lerpValue);
-            GetComponent<ParticleSystem>().enableEmission = false;
         }
 
 

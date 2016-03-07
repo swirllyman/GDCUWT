@@ -5,7 +5,7 @@ public class CraftingItems : MonoBehaviour {
 	public float speed = 1;
 	public Camera mainCamera;
 
-	public Camera craftCamera;
+	public Transform craftCamLoc;
 	private bool crafting;
 	private GameObject currentCraftObject;
 	private GameObject currentObject;
@@ -18,12 +18,14 @@ public class CraftingItems : MonoBehaviour {
 
     private WalkAround playerScript;
 
+
+    private Vector3 prevPos;
+    private Quaternion prevRot;
+
 	// Use this for initialization
 	void Start () {
         playerScript = GameObject.FindGameObjectWithTag("Player").GetComponent<WalkAround>();
-        craftCamera = GameObject.FindGameObjectWithTag("Craft Cam").GetComponent<Camera>();
-        mainCamera.enabled = true;
-        craftCamera.enabled = false;
+        craftCamLoc = GameObject.FindGameObjectWithTag("Craft Cam").transform;
         crafting = false;
 	}
 	
@@ -38,6 +40,8 @@ public class CraftingItems : MonoBehaviour {
 					Destroy (currentObject);
 					break;
 				case "CraftingTable":
+                    prevPos = mainCamera.transform.position;
+                    prevRot = mainCamera.transform.rotation;
 					crafting = true;
                     playerScript.crafting = true;
                     playerScript.HideCursor(false);
@@ -47,11 +51,13 @@ public class CraftingItems : MonoBehaviour {
 		}
 		if(crafting) {
 			currentObject.GetComponent<ParticleSystem>().enableEmission = false;
-			mainCamera.enabled = false;
-			craftCamera.enabled = true;
-			Ray ray = craftCamera.ScreenPointToRay(Input.mousePosition);
+            //mainCamera.enabled = false;
+            //craftCamera.enabled = true;
+            mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, craftCamLoc.position, Time.deltaTime * 2);
+            mainCamera.transform.rotation = Quaternion.Slerp(mainCamera.transform.rotation, craftCamLoc.rotation, Time.deltaTime * 2);
+			Ray ray = mainCamera.ScreenPointToRay(Input.mousePosition);
 			currentPoint = Input.mousePosition;
-			currentPoint = craftCamera.ScreenToWorldPoint(currentPoint);
+			currentPoint = mainCamera.ScreenToWorldPoint(currentPoint);
 			currentPoint.y = 458f;
 			//if(Physics.Raycast(transform.position, out hit, 10000.0f)) {
 			if(Physics.Raycast (ray, out hit, 10000.0f)) {
@@ -110,9 +116,6 @@ public class CraftingItems : MonoBehaviour {
 				}
 			}
 
-		} else {
-			mainCamera.enabled = true;
-			craftCamera.enabled = false;
 		}
 	}
 
@@ -136,7 +139,9 @@ public class CraftingItems : MonoBehaviour {
 	void OnGUI() {
 		if(crafting){
 			if(GUI.Button (new Rect(Screen.width - 100, 25, 75, 50), "Exit")) {
-				crafting = false;
+                mainCamera.transform.position = Vector3.Lerp(mainCamera.transform.position, prevPos, Time.deltaTime*2);
+                mainCamera.transform.rotation = Quaternion.Slerp(mainCamera.transform.rotation, prevRot, Time.deltaTime * 2);
+                crafting = false;
                 playerScript.crafting = false;
                 playerScript.HideCursor(true);
             }
