@@ -69,10 +69,6 @@ public class CraftableItem : MonoBehaviour {
 
         if (selected)
         {
-            //currentPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
-            //currentPoint.y = 458f;
-            //transform.position = currentPoint;
-
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if(Physics.Raycast(ray, out hit))
