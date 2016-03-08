@@ -120,7 +120,7 @@ public class CraftingItems : MonoBehaviour {
 	}
 
 	void OnTriggerEnter(Collider c){
-		if(c.gameObject.tag == "Interact" || c.gameObject.tag == "CraftingTable") {
+		if((!crafting) && (c.gameObject.tag == "Interact" || c.gameObject.tag == "CraftingTable")) {
 			c.gameObject.GetComponent<ParticleSystem>().enableEmission = true;
 			currentObject = c.gameObject;
 			interacting = true;
@@ -128,7 +128,7 @@ public class CraftingItems : MonoBehaviour {
 	}
 
 	void OnTriggerExit (Collider c) {
-		if(c.gameObject.tag == "Interact" || c.gameObject.tag == "CraftingTable") {
+		if((!crafting) && (c.gameObject.tag == "Interact" || c.gameObject.tag == "CraftingTable")) {
 			c.gameObject.GetComponent<ParticleSystem>().enableEmission = false;
 			currentObject = null;
 			interacting = false;

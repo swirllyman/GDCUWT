@@ -15,8 +15,12 @@ public class CraftableItem : MonoBehaviour {
     bool created = false;
 
     public float outlineValue = .0015f;
+
+    Collider myCollider;
+
     // Use this for initialization
     void Start () {
+        myCollider = GetComponent<Collider>();
         gameObject.layer = 2;
         startingPos = transform.position;
 	}
@@ -40,6 +44,7 @@ public class CraftableItem : MonoBehaviour {
         if (realObject == null &! created) {
             gameObject.layer = 0;
             GetComponent<Renderer>().enabled = true;
+            myCollider.enabled = true;
             created = true;
         }
 
@@ -64,26 +69,30 @@ public class CraftableItem : MonoBehaviour {
 
         if (selected)
         {
-            currentPoint = Input.mousePosition;
-            currentPoint = Camera.main.ScreenToWorldPoint(currentPoint);
-            currentPoint.y = 458f;
-            transform.position = currentPoint;
-            transform.localPosition = new Vector3(transform.localPosition.x - .005f, transform.localPosition.y, transform.localPosition.z);
-            if (Input.GetMouseButtonUp(0))
-            {
-                Select(false);
-            }
+            //currentPoint = Camera.main.ScreenToWorldPoint(Input.mousePosition);
+            //currentPoint.y = 458f;
+            //transform.position = currentPoint;
 
             Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
             RaycastHit hit;
             if(Physics.Raycast(ray, out hit))
             {
-                if(hit.collider.tag != "CraftTable2")
+                if (hit.collider.tag != "CraftTable2")
                 {
-                    Debug.Log("Out of range, You hit: " + hit.collider.tag);
+                    Debug.Log("Out of range, You hit: " + hit.collider.name);
                     Select(false);
                     transform.position = startingPos;
                 }
+                else
+                {
+                    currentPoint = new Vector3(hit.point.x, 458f, hit.point.z);
+                    transform.position = currentPoint;
+                }
+            }
+
+            if (Input.GetMouseButtonUp(0))
+            {
+                Select(false);
             }
 
         }
