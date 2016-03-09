@@ -93,6 +93,7 @@
     <Compile Include="Assets\Scripts\TableColorChanger.cs" />
     <Compile Include="Assets\Scripts\WalkAround.cs" />
     <Compile Include="Assets\Scripts\Water.cs" />
+    <Compile Include="Assets\Shark.cs" />
     <Compile Include="Assets\z_Standard Assets\Water (Basic)\Sources\Scripts\WaterSimple.cs" />
   </ItemGroup>
   <ItemGroup>
